@@ -10,6 +10,10 @@ public class NumberRouteEntity {
 	private String number;
 	private String plat;
 	
+	public NumberRouteEntity (String number, String plat) {
+		this.number = number;
+		this.plat = plat;
+	}
 	public String getNumber() {
 		return number;
 	}

@@ -1,19 +1,23 @@
 package dudu.cass.numberroute.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import dudu.cass.numberroute.repository.PstnRepository;
+import dudu.cass.numberroute.entity.NumberRouteEntity;
+import dudu.cass.numberroute.repository.NumberRouteRepository;
 import dudu.cass.numberroute.service.NumberRouteService;
 
 
 public class NumberRouteServiceImpl implements NumberRouteService {
 
 	@Autowired
-	private PstnRepository pstnRepository;
+	private NumberRouteRepository repository;
 	@Override
-	public String GetNumberRouteInfo(String number) throws Exception {
+	public List<NumberRouteEntity> GetNumberRouteInfo(String number) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		
+		return repository.findByNumber(number);
 	}
 
 }
