@@ -31,12 +31,30 @@ public class NumberRouteServiceImpl implements NumberRouteService {
 	public List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers) throws Exception {
 		List<NumberRouteInfo> result = new ArrayList<NumberRouteInfo>();
 		NumberRouteInfo tmp = null;
-		List<NumberRouteEntity> entitys = repository.findByPrefixIn( numbers);
-		for(NumberRouteEntity entity : entitys) {
+		List<NumberRouteEntity> entities = repository.findByPrefixIn( numbers);
+		for(NumberRouteEntity entity : entities) {
 				tmp = new NumberRouteInfo(entity);
 				result.add(tmp);
 		}
 		return result;
+	}
+	@Override
+	public boolean SetNumberRouteInfos(ArrayList<String> numbers, String plat) {
+
+		List<NumberRouteEntity> entities = null;
+		ArrayList<String> notExistNumbers = numbers;
+		entities = repository.findByPrefixIn( numbers);
+		for(NumberRouteEntity entity : entities) {
+			notExistNumbers.remove(entity.getPrefix());
+			entity.setDescription(plat);
+		}
+		for(String number : notExistNumbers) {
+			NumberRouteEntity tmpEntity = new NumberRouteEntity(number,plat);
+			tmpEntity.setGwlist("test");
+			entities.add(tmpEntity);
+		}
+		repository.saveAll(entities);
+		return true ;
 	}
 
 }

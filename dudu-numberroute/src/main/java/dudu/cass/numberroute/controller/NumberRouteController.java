@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dudu.cass.numberroute.model.NumberRouteInfo;
 import dudu.cass.numberroute.model.NumberRouteResult;
-import dudu.cass.numberroute.requestparam.NumberRouteGet;
+import dudu.cass.numberroute.requestparam.NumberRouteParams;
 import dudu.cass.numberroute.service.NumberRouteService;
 
 
@@ -37,13 +37,14 @@ public class NumberRouteController {
 		} 
 		catch (Exception e) {
 			logger.error("getNumberRouteInfo 异常", e);
-
+			result.setStatus("000500");
+			result.setStatus("发生异常");
 		}
 		return result;
 	}
 	
 	@RequestMapping(value="v1/getRouteInfo",method=RequestMethod.POST)
-	public NumberRouteResult getNumberRouteInfo(@RequestBody NumberRouteGet params) throws Exception {
+	public NumberRouteResult getNumberRouteInfo(@RequestBody NumberRouteParams params) throws Exception {
 		List<NumberRouteInfo> plat = null ;
 		NumberRouteResult result = new NumberRouteResult("0000","OK");
 
@@ -53,6 +54,30 @@ public class NumberRouteController {
 		} 
 		catch (Exception e) {
 			logger.error("getNumberRouteInfo 异常", e);
+			result.setStatus("000500");
+			result.setStatus("发生异常");
+		}
+		return result;
+	}
+	
+	@RequestMapping(value="v1/set",method=RequestMethod.POST)
+	public NumberRouteResult setNumberRouteInfo(@RequestBody NumberRouteParams params) throws Exception {
+
+		NumberRouteResult result = new NumberRouteResult("0000","OK");
+
+		try {
+			boolean dealOK = false;
+			new NumberRouteResult("0000","OK");
+			dealOK = service.SetNumberRouteInfos(params.getNumbers(), params.getPlatform());
+			if (!dealOK) {
+				result.setStatus("0001");
+				result.setStatus("设置失败");
+			}			
+		} 
+		catch (Exception e) {
+			logger.error("setNumberRouteInfo 异常", e);
+			result.setStatus("000500");
+			result.setStatus("发生异常");
 		}
 		return result;
 	}

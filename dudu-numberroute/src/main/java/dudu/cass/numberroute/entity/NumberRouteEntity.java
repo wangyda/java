@@ -3,6 +3,7 @@ package dudu.cass.numberroute.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,12 +12,20 @@ import javax.persistence.Table;
 public class NumberRouteEntity {
 
 	private long ruleid;
+	private String groupid= "2";
 	private String prefix;
 	private String gwlist;
 	private String description;
 	
+	public NumberRouteEntity() {
+
+	}
+	public NumberRouteEntity(String number, String plat) {
+		this.prefix = number;
+		this.description = plat;
+	}
 	@Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	public long getRuleid() {
 		return ruleid;
 	}
@@ -31,7 +40,7 @@ public class NumberRouteEntity {
 		this.prefix = prefix;
 	}
 	
-	@Column(name="gwlist", nullable = true, length = 255)
+	@Column(name="gwlist", nullable = false, length = 255)
 	public String getGwlist() {
 		return gwlist;
 	}
@@ -44,6 +53,13 @@ public class NumberRouteEntity {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	@Column(name="groupid", nullable = false, length = 255)
+	public String getGroupid() {
+		return groupid;
+	}
+	public void setGroupid(String groupid) {
+		this.groupid = groupid;
 	}	
 	
 	

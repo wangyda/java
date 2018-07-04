@@ -9,6 +9,7 @@ public interface NumberRouteService {
 	
 	NumberRouteInfo GetNumberRouteInfo(String number)  throws Exception;
 	List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers) throws Exception;
+	boolean SetNumberRouteInfos(ArrayList<String> numbers, String plat);
 
 
 }
