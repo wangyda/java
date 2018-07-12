@@ -1,22 +1,14 @@
 package dudu.cass.numberroute.model;
 
-import dudu.cass.numberroute.entity.NumberRouteEntity;
-
 public class NumberRouteInfo {
 
 	private String number;
-	private String plat = "NO";
+	private String plat ;
 
-	public NumberRouteInfo(NumberRouteEntity routeEntity) {
+	public NumberRouteInfo(String number ,String platform) {
 		// TODO Auto-generated constructor stub
-		this.number = routeEntity.getPrefix();
-		this.plat = routeEntity.getDescription();
-		
-	}
-
-	public NumberRouteInfo(String number2) {
-		// TODO Auto-generated constructor stub
-		this.number = number2;
+		this.number = number;
+		this.plat = platform;
 	}
 
 	public String getNumber() {

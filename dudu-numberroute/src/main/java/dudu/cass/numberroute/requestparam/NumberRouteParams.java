@@ -33,6 +33,4 @@ public class NumberRouteParams {
 	public void setPlatform(String platform) {
 		this.platform = platform;
 	}
-	
-
 }

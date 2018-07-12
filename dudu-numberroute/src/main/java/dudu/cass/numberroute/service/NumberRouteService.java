@@ -7,9 +7,8 @@ import dudu.cass.numberroute.model.NumberRouteInfo;
 
 public interface NumberRouteService {
 	
-	NumberRouteInfo GetNumberRouteInfo(String number)  throws Exception;
-	List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers) throws Exception;
-	boolean SetNumberRouteInfos(ArrayList<String> numbers, String plat);
-
-
+	//NumberRouteInfo GetNumberRouteInfo(String number)  throws Exception;
+	List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers) ;
+	boolean SetNumberRouteInfos(ArrayList<String> numbers, String platform);
+    public  boolean isValidPlat(String platform) ;
 }

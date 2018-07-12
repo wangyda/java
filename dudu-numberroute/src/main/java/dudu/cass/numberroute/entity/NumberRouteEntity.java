@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class NumberRouteEntity {
 
 	private long ruleid;
-	private String groupid= "2";
+	private String groupid;
 	private String prefix;
 	private String gwlist;
 	private String description;
@@ -23,6 +23,17 @@ public class NumberRouteEntity {
 	public NumberRouteEntity(String number, String plat) {
 		this.prefix = number;
 		this.description = plat;
+	}
+	public NumberRouteEntity(String number, String plat, String gwlist) {
+		this.prefix = number;
+		this.description = plat;
+		this.gwlist = gwlist;
+	}
+	public NumberRouteEntity(String number, String plat, String gwlist, String groupid) {
+		this.prefix = number;
+		this.description = plat;
+		this.gwlist = gwlist;
+		this.groupid = groupid;
 	}
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
