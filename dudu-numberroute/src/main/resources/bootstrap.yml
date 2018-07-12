@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: dudu-numberroute
+  profiles:
+    active: dev
+logging:
+    file: ../logs/${spring.application.name}.log
+---
+# SPRING PROFILES
+spring:
+  profiles: dev
+  cloud:
+      config:
+        discovery:
+           enabled: true
+           service-id: dudu-config
+        name: dudu-numberroute
+        profile: dev
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.20.8.242:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      zone: ${spring.cloud.client.ipAddress}
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}:(${eureka.instance.metadata-map.zone})
