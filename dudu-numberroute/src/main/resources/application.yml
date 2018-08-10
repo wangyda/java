@@ -1,28 +1,44 @@
-# Server settings
-server:
-    port: 8080
-
-# SPRING PROFILES
 spring:
-    datasource:
-      type: com.alibaba.druid.pool.DruidDataSource
-      url: jdbc:mysql://172.20.12.50:3306/opensips?useUnicode=true&characterEncoding=utf-8&useSSL=false
-      driver-class-name: com.mysql.jdbc.Driver
-      username: root
-      password: 123456
+  application:
+    name: dudu-numberroute    
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://172.20.12.50:3306/opensips?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: yytx!mysql
 
-    jpa:
-      show-sql: true
-    # HTTP ENCODING
-    http:
-        encoding.charset: UTF-8
-        encoding.force: true
+  jpa:
+    show-sql: true
 
+  http:
+      encoding.charset: UTF-8
+      encoding.force: true
 
+server:
+  port: 8080
+  maxHttpHeaderSize: 8192
 
-# LOGGING
 logging:
-    file: number-route.log
-    level:
-       com.ibatis: DEBUG
-       dudu.ops: DEBUG
+  file: ../logs/${spring.application.name}.log
+    
+dudu:
+  numberroute:
+    opensipsMiUrl: http://172.20.8.128:8888/json
+    inboundGroupid: 2
+    platMap:
+      HBXT : 16
+      YYT: 31
+      YYTX: 13=1,14=1
+      YYTXVOS: 66
+      DDYH: 64
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.20.8.242:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    metadata-map:
+      zone: ${spring.cloud.client.ipAddress}
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}:(${eureka.instance.metadata-map.zone})    

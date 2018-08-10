@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import dudu.cass.numberroute.common.PlatformConfig;
 import dudu.cass.numberroute.entity.NumberRouteEntity;
@@ -20,7 +28,11 @@ public class NumberRouteServiceImpl implements NumberRouteService {
     
 	@Autowired
 	private NumberRouteRepository repository;
+	
+    @Value("${dudu.numberroute.opensipsMiUrl}")
+    private String OpensipsMiUrl;
 
+    
 	@Override
 	public List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers)  {
 		List<NumberRouteInfo> result = new ArrayList<NumberRouteInfo>();
@@ -56,16 +68,35 @@ public class NumberRouteServiceImpl implements NumberRouteService {
 		return true ;
 	}
 	
-	   private  String getGwlistByPlat(String platform) {
+   private  String getGwlistByPlat(String platform) {
 
-	        String gwlist = null;
-	        gwlist = platfomConfig.getPlatMap().get(platform);
-	        return gwlist;
-	    }
-	   @Override
-	    public  boolean isValidPlat(String platform) {
-	        
-	        return platfomConfig.getPlatMap().containsKey(platform);
-	    }
+        String gwlist = null;
+        gwlist = platfomConfig.getPlatMap().get(platform);
+        return gwlist;
+    }
+   @Override
+    public  boolean isValidPlat(String platform) {
+        
+        return platfomConfig.getPlatMap().containsKey(platform);
+    }
+
+   /**
+    * 重新加载路由信息，使设置生效
+    */
+    @Override
+    public boolean ReloadNumberRoute() {
+        try {
+            //HttpHeaders requestHeaders = new HttpHeaders();
+            //HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> tempResult = restTemplate.getForEntity(OpensipsMiUrl + "/dr_reload",  String.class);
+            
+            return tempResult.getStatusCode().is2xxSuccessful();
+ 
+        }catch (HttpServerErrorException e){
+            return false;
+        }
+
+    }
 
 }

@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dudu.cass.numberroute.common.PlatformConfig;
 import dudu.cass.numberroute.model.NumberRouteInfo;
 import dudu.cass.numberroute.requestparam.NumberRouteParams;
 import dudu.cass.numberroute.service.NumberRouteService;
@@ -90,6 +88,22 @@ public class NumberRouteController {
 			result.put("msg","发生异常");
 		}
 		return result.toString();
+	}
+	
+	@RequestMapping(value="v1/reload",method=RequestMethod.POST)
+	public String reload( ) throws Exception{
+	    JSONObject result = new JSONObject();      
+
+	    if (service.ReloadNumberRoute()) {
+            result.put("status", "000000");
+            result.put("msg", "OK");
+	    }
+	    else
+	    {                  
+	        result.put("status", "000001");
+	        result.put("msg", "设置失败");	        
+	    }
+	    return result.toString();
 	}
 	
 	private boolean isValidNumbers(ArrayList<String> numbers){
