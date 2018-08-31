@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,7 @@ import dudu.cass.numberroute.service.NumberRouteService;
 
 @RestController
 @RequestMapping("numberroute")
+@CrossOrigin 
 public class NumberRouteController {
 	@Autowired
 	NumberRouteService service;
@@ -39,7 +41,7 @@ public class NumberRouteController {
 			}
 
 			List<NumberRouteInfo> plat = null ;
-			plat = service.GetNumberRouteInfos(params.getNumbers());
+			plat = service.getNumberRouteInfos(params.getNumbers());
 	        result.put("status", "000000");
 	        result.put("msg", "OK");
 	        result.put("data", plat);
@@ -52,7 +54,7 @@ public class NumberRouteController {
 		}
 		return result.toString();
 	}
-	
+		
 	@RequestMapping(value="v1/set",method=RequestMethod.POST)
 	public String setNumberRouteInfo(@RequestBody NumberRouteParams params) throws Exception {
 		JSONObject result = new JSONObject();		
@@ -68,7 +70,7 @@ public class NumberRouteController {
 
 			boolean dealOK = false;
 			if( service.isValidPlat(platform)) {
-    			dealOK = service.SetNumberRouteInfos(params.getNumbers(), platform);
+    			dealOK = service.setNumberRouteInfos(params.getNumbers(), platform);
     			if (!dealOK) {
     		        result.put("status", "000001");
     		        result.put("msg", "设置失败");
@@ -94,7 +96,7 @@ public class NumberRouteController {
 	public String reload( ) throws Exception{
 	    JSONObject result = new JSONObject();      
 
-	    if (service.ReloadNumberRoute()) {
+	    if (service.reloadNumberRoute()) {
             result.put("status", "000000");
             result.put("msg", "OK");
 	    }
@@ -113,4 +115,56 @@ public class NumberRouteController {
 		}
 		return true;
 	}
+    @RequestMapping(value="v1/getVendor",method=RequestMethod.POST)
+    public String getNumberVentorInfo(@RequestBody NumberRouteParams params) throws Exception {
+        JSONObject result = new JSONObject();
+
+        try {
+            logger.info("get params: " + params);
+            if(!isValidNumbers(params.getNumbers())) {
+                result.put("status","000001");
+                result.put("msg", "号码不正确");
+                return result.toString();
+            }
+
+            List<NumberRouteInfo> plat = null ;
+            plat = service.getNumberVendorInfos(params.getNumbers());
+            result.put("status", "000000");
+            result.put("msg", "OK");
+            result.put("data", plat);
+
+        } 
+        catch (Exception e) {
+            logger.error("getNumberRouteInfo 异常", e);
+            result.put("status","000500");
+            result.put("msg", "发生异常");
+        }
+        return result.toString();
+    }
+    @RequestMapping(value="v1/getAll",method=RequestMethod.POST)
+    public String getNumberAllInfo(@RequestBody NumberRouteParams params) throws Exception {
+        JSONObject result = new JSONObject();
+
+        try {
+            logger.info("get params: " + params);
+            if(!isValidNumbers(params.getNumbers())) {
+                result.put("status","000001");
+                result.put("msg", "号码不正确");
+                return result.toString();
+            }
+
+            List<NumberRouteInfo> plat = null ;
+            plat = service.getNumberAllInfos(params.getNumbers());
+            result.put("status", "000000");
+            result.put("msg", "OK");
+            result.put("data", plat);
+
+        } 
+        catch (Exception e) {
+            logger.error("getNumberRouteInfo 异常", e);
+            result.put("status","000500");
+            result.put("msg", "发生异常");
+        }
+        return result.toString();
+    }
 }

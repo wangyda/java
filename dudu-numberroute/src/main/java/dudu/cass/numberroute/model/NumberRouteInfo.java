@@ -4,6 +4,7 @@ public class NumberRouteInfo {
 
 	private String number;
 	private String plat ;
+	private String vendor;
 
 	public NumberRouteInfo(String number ,String platform) {
 		// TODO Auto-generated constructor stub
@@ -11,7 +12,11 @@ public class NumberRouteInfo {
 		this.plat = platform;
 	}
 
-	public String getNumber() {
+	public NumberRouteInfo() {
+        // TODO Auto-generated constructor stub
+    }
+
+    public String getNumber() {
 		return number;
 	}
 
@@ -26,4 +31,12 @@ public class NumberRouteInfo {
 	public void setPlat(String plat) {
 		this.plat = plat;
 	}
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
 }

@@ -30,7 +30,7 @@ public class Swagger2 {
                 .title("嘟嘟平台线路管理接口")
                 .description("嘟嘟平台线路管理接口")
                 .termsOfServiceUrl("http://")
-                .contact("小嘟")
+                .contact("wyd")
                 .version("1.0")
                 .build();
     }

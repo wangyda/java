@@ -15,8 +15,11 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import dudu.cass.numberroute.common.PlatformConfig;
+import dudu.cass.numberroute.entity.NumberGroupEntity;
 import dudu.cass.numberroute.entity.NumberRouteEntity;
+import dudu.cass.numberroute.entity.NumberRouteInfoEntity;
 import dudu.cass.numberroute.model.NumberRouteInfo;
+import dudu.cass.numberroute.repository.NumberGroupRepository;
 import dudu.cass.numberroute.repository.NumberRouteRepository;
 import dudu.cass.numberroute.service.NumberRouteService;
 
@@ -29,12 +32,15 @@ public class NumberRouteServiceImpl implements NumberRouteService {
 	@Autowired
 	private NumberRouteRepository repository;
 	
+    @Autowired
+    private NumberGroupRepository numberGroupRepository;
+	
     @Value("${dudu.numberroute.opensipsMiUrl}")
     private String OpensipsMiUrl;
 
     
 	@Override
-	public List<NumberRouteInfo> GetNumberRouteInfos(ArrayList<String> numbers)  {
+	public List<NumberRouteInfo> getNumberRouteInfos(ArrayList<String> numbers)  {
 		List<NumberRouteInfo> result = new ArrayList<NumberRouteInfo>();
 		NumberRouteInfo tmp = null;
 		List<NumberRouteEntity> entities = repository.findByGroupidAndPrefixIn(platfomConfig.getInboundGroupid(), numbers);
@@ -46,7 +52,7 @@ public class NumberRouteServiceImpl implements NumberRouteService {
 	}
 
 	@Override
-	public boolean SetNumberRouteInfos(ArrayList<String> numbers, String platform) {
+	public boolean setNumberRouteInfos(ArrayList<String> numbers, String platform) {
 	    if(isValidPlat(platform) == false) { 
 	        return false;
 	    }
@@ -84,7 +90,7 @@ public class NumberRouteServiceImpl implements NumberRouteService {
     * 重新加载路由信息，使设置生效
     */
     @Override
-    public boolean ReloadNumberRoute() {
+    public boolean reloadNumberRoute() {
         try {
             //HttpHeaders requestHeaders = new HttpHeaders();
             //HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
@@ -98,5 +104,37 @@ public class NumberRouteServiceImpl implements NumberRouteService {
         }
 
     }
+
+@Override
+public List<NumberRouteInfo> getNumberVendorInfos(ArrayList<String> numbers) {
+    List<NumberRouteInfo> result = new ArrayList<NumberRouteInfo>();
+    NumberRouteInfo tmp = null;
+    List<NumberGroupEntity> entities = numberGroupRepository.findByUsernameIn(numbers);
+    for(NumberGroupEntity entity : entities) {
+            tmp = new NumberRouteInfo();
+            tmp.setNumber(entity.getUsername());
+            tmp.setVendor(entity.getDescription());
+            result.add(tmp);
+    }
+    return result;
+}
+
+@Override
+public List<NumberRouteInfo> getNumberAllInfos(ArrayList<String> numbers) {
+    // TODO Auto-generated method stub
+    List<NumberRouteInfo> result = new ArrayList<NumberRouteInfo>();
+    NumberRouteInfo tmp = null;
+    List<Object> entities = numberGroupRepository.findVendorAndPlatByUsernames(numbers);
+    for(Object entity : entities) {
+            tmp = new NumberRouteInfo();
+            Object[] rowArray = (Object[]) entity;
+            tmp.setNumber(rowArray[0].toString());
+            if (rowArray[1] != null) tmp.setVendor(rowArray[1].toString());
+            if (rowArray[2] != null) tmp.setPlat(rowArray[2].toString());
+            result.add(tmp);
+    }
+    return result;
+
+}
 
 }
